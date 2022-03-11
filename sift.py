@@ -7,8 +7,9 @@ from PIL import Image
 MAX_FEATURES = 5000
 GOOD_MATCH_PERCENT = 0.15
 
-img1 = cv.imread('C:\sls_harris\data\DSCF0281.jpg')
+img1 = cv.imread('C:\sls_harris\data\DSCF0285.jpg')
 img2 = cv.imread('C:\sls_harris\data\wisconsin_flat.jpg')
+img1 = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
 img2 = cv.cvtColor(img2, cv.COLOR_BGR2GRAY)
 img2 = cv.resize(img2, (480, 640))
 
