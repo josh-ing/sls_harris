@@ -3,7 +3,6 @@ from cv2 import DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
-import os
 
 MAX_FEATURES = 5000
 GOOD_MATCH_PERCENT = 0.2
