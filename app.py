@@ -4,8 +4,8 @@ from feature_match import align_images
 
 
 directory = os.getcwd()
-input = os.path.join(directory, 'data\DSCF0276.jpg')
-reference = os.path.join(directory, 'data\wisconsin_flat.jpg')
+input = os.path.join(directory, 'data\IMG_3627_IG.jpg')
+reference = os.path.join(directory, 'data\\template_wisconsin.jpg')
 image = cv.imread(input, cv.IMREAD_COLOR)
 template = cv.imread(reference, cv.IMREAD_COLOR)
 

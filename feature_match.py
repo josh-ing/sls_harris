@@ -4,14 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 
-MAX_FEATURES = 5000
+MAX_FEATURES = 500
 GOOD_MATCH_PERCENT = 0.2
 #maybe instead use homography transformation instead of sift, because sift is for image recognition
 
 def align_images(input, reference, debug=False):
     input = cv.cvtColor(input, cv.COLOR_BGR2GRAY)
     reference = cv.cvtColor(reference, cv.COLOR_BGR2GRAY)
-    reference= cv.resize(reference, (640, 480))
     # h, status = cv.findHomography(pts_src, pts_dst)
 
     #transformecc helps us calculate rotation of two images and aligns them, might be what we want
