@@ -1,5 +1,4 @@
 import cv2 as cv
-from cv2 import MOTION_HOMOGRAPHY
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
@@ -7,7 +6,7 @@ from PIL import Image
 MAX_FEATURES = 5000
 GOOD_MATCH_PERCENT = 0.15
 
-img1 = cv.imread('C:\sls_harris\data\DSCF0285.jpg')
+img1 = cv.imread('C:\sls_harris\data\DSCF0275.jpg')
 img2 = cv.imread('C:\sls_harris\data\wisconsin_flat.jpg')
 img1 = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
 img2 = cv.cvtColor(img2, cv.COLOR_BGR2GRAY)
