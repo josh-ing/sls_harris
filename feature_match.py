@@ -47,7 +47,7 @@ def align_images(input, reference):
     (height, width) = reference.shape[:2]
     aligned = cv.warpPerspective(input, H, (width, height))
 
-    return aligned, H
+    return aligned, H, img3
 
 def find_centroids(image):
     ret, dest = cv.threshold(image, 0.01 * image.max(), 255, 0)
