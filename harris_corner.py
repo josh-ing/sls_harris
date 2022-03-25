@@ -6,7 +6,7 @@ from PIL import Image
 import math
 
 def find_corners(image):
-# find corners first
+    
     gray = np.float32(image)
     dst = cv.cornerHarris(gray, 2, 3, 0.04)
     dst = cv.dilate(dst, None)

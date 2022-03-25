@@ -6,7 +6,7 @@ from PIL import Image
 import math
 
 
-MAX_FEATURES = 350
+MAX_FEATURES = 500
 GOOD_MATCH_PERCENT = 0.2
 
 def align_images(input, reference):
