@@ -13,6 +13,9 @@ def align_images(input, reference):
     inputgray = cv.cvtColor(input, cv.COLOR_BGR2GRAY)
     referencegray = cv.cvtColor(reference, cv.COLOR_BGR2GRAY)
 
+    # find corners first
+    dst = cv.cornerHarris(gray, 0.)
+
     #transformecc helps us calculate rotation of two images and aligns them, might be what we want
     orb = cv.ORB_create(MAX_FEATURES)
     # sift = cv.SIFT_create(MAX_FEATURES)
@@ -49,6 +52,18 @@ def align_images(input, reference):
 
     return aligned, H, img3
 
+def find_centroids(image):
+    ret, dst = cv.threshold(dst, 0.01 * dst.max(), 255, 0)
+    dst = np.uint8(dst)
+
+    # find centroids
+    ret, labels, stats, centroids = cv.connectedComponentsWithStats(dst)
+    # define the criteria to stop and refine the corners
+    criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 100, 
+                0.001)
+    corners = cv.cornerSubPix(gray,np.float32(centroids),(5,5), 
+              (-1,-1),criteria)
+    return corners
     
 
 
