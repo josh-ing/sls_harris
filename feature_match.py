@@ -13,56 +13,39 @@ def align_images(input, reference):
     inputgray = cv.cvtColor(input, cv.COLOR_BGR2GRAY)
     referencegray = cv.cvtColor(reference, cv.COLOR_BGR2GRAY)
 
-    # find corners first
-    gray = np.float32(inputgray)
-    grey = np.float32(referencegray)
-    dst = cv.cornerHarris(gray, 2, 3, 0.04)
-    dst2 = cv.cornerHarris(grey, 2, 3, 0.04)
-    dst = cv.dilate(dst, None)
-    dst2 = cv.dilate(dst2, None)
+    # #transformecc helps us calculate rotation of two images and aligns them, might be what we want
+    orb = cv.ORB_create(MAX_FEATURES)
+    # sift = cv.SIFT_create(MAX_FEATURES)
 
-    #list of corners
-    corners_input = find_centroids(dst)
-    corners_reference = find_centroids(dst2)
+    # keypoints1, descript1 = sift.detectAndCompute(input, None)
+    # keypoints2, descript2 = sift.detectAndCompute(reference, None)
+    keypoints1, descript1 = orb.detectAndCompute(inputgray, None)
+    keypoints2, descript2 = orb.detectAndCompute(referencegray, None)
 
-    #match 
-    (H, mask) = cv.findHomography(corners_input, corners_reference, method=cv.RANSAC)
+    #match features of two images
+
+    bf = cv.DescriptorMatcher_create(DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING)
+    # bf = cv.BFMatcher_create(cv.NORM_L1, crossCheck = True)
+    matches = bf.match(descript1, descript2, None)
+    matches = sorted(matches, key = lambda x: x.distance, reverse=False)
+
+    # good_matches = int(len(matches) * GOOD_MATCH_PERCENT)
+    # matches = matches[:good_matches]
+    matches = matches[:int(len(matches)* GOOD_MATCH_PERCENT)]
+
+    img3 = cv.drawMatches(inputgray, keypoints1, referencegray, keypoints2, matches, None, flags = 2)
+
+    #homography matrix
+    pointsA = np.zeros((len(matches), 2), dtype=np.float32)
+    pointsB = np.zeros((len(matches), 2), dtype=np.float32)
+
+    for (i, m) in enumerate(matches):
+        pointsA[i, :] = keypoints1[m.queryIdx].pt
+        pointsB[i, :] = keypoints2[m.trainIdx].pt
+    
+    (H, mask) = cv.findHomography(pointsA, pointsB, method=cv.RANSAC)
     (height, width) = reference.shape[:2]
     aligned = cv.warpPerspective(input, H, (width, height))
-
-    # #transformecc helps us calculate rotation of two images and aligns them, might be what we want
-    # orb = cv.ORB_create(MAX_FEATURES)
-    # # sift = cv.SIFT_create(MAX_FEATURES)
-
-    # # keypoints1, descript1 = sift.detectAndCompute(input, None)
-    # # keypoints2, descript2 = sift.detectAndCompute(reference, None)
-    # keypoints1, descript1 = orb.detectAndCompute(inputgray, None)
-    # keypoints2, descript2 = orb.detectAndCompute(referencegray, None)
-
-    # #match features of two images
-
-    # bf = cv.DescriptorMatcher_create(DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING)
-    # # bf = cv.BFMatcher_create(cv.NORM_L1, crossCheck = True)
-    # matches = bf.match(descript1, descript2, None)
-    # matches = sorted(matches, key = lambda x: x.distance, reverse=False)
-
-    # # good_matches = int(len(matches) * GOOD_MATCH_PERCENT)
-    # # matches = matches[:good_matches]
-    # matches = matches[:int(len(matches)* GOOD_MATCH_PERCENT)]
-
-    # img3 = cv.drawMatches(inputgray, keypoints1, referencegray, keypoints2, matches, None, flags = 2)
-
-    # #homography matrix
-    # pointsA = np.zeros((len(matches), 2), dtype=np.float32)
-    # pointsB = np.zeros((len(matches), 2), dtype=np.float32)
-
-    # for (i, m) in enumerate(matches):
-    #     pointsA[i, :] = keypoints1[m.queryIdx].pt
-    #     pointsB[i, :] = keypoints2[m.trainIdx].pt
-    
-    # (H, mask) = cv.findHomography(pointsA, pointsB, method=cv.RANSAC)
-    # (height, width) = reference.shape[:2]
-    # aligned = cv.warpPerspective(input, H, (width, height))
 
     return aligned, H
 
