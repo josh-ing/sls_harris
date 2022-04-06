@@ -1,0 +1,14 @@
+import numpy as np
+import cv2 as cv
+from matplotlib import pyplot as plt
+
+def get_outline(image):
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    pixel_values = image.reshape((-1, 3))
+    pixel_values = np.float32(pixel_values)
+    criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER)
+    # ret, mask = cv.threshold(gray, 152, 166, cv.THRESH_BINARY)
+    # contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+    # img_contour = np.zeros(image.shape)
+    # modImage = cv.drawContours(img_contour, contours, -1, (0, 255, 0), 3)
+    # return modImage
