@@ -9,7 +9,7 @@ from contours import get_outline
 # try this https://stackoverflow.com/questions/54589566/how-to-detect-edge-points-of-an-object-using-opencv-python
 
 directory = os.getcwd()
-input = os.path.join(directory, 'data\\titans_reference.jpg')
+input = os.path.join(directory, 'data\IMG_3792.jpg')
 reference = os.path.join(directory, 'data\\falcons_reference.jpg')
 image = cv.imread(input, cv.IMREAD_COLOR)
 
