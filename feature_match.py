@@ -10,8 +10,6 @@ MAX_FEATURES = 500
 GOOD_MATCH_PERCENT = 0.2
 
 def align_images(input, reference):
-    inputgray = cv.cvtColor(input, cv.COLOR_BGR2GRAY)
-    referencegray = cv.cvtColor(reference, cv.COLOR_BGR2GRAY)
 
     # #transformecc helps us calculate rotation of two images and aligns them, might be what we want
     orb = cv.ORB_create(MAX_FEATURES)
@@ -19,8 +17,8 @@ def align_images(input, reference):
 
     # keypoints1, descript1 = sift.detectAndCompute(input, None)
     # keypoints2, descript2 = sift.detectAndCompute(reference, None)
-    keypoints1, descript1 = orb.detectAndCompute(inputgray, None)
-    keypoints2, descript2 = orb.detectAndCompute(referencegray, None)
+    keypoints1, descript1 = orb.detectAndCompute(input, None)
+    keypoints2, descript2 = orb.detectAndCompute(reference, None)
 
     #match features of two images
 
@@ -33,7 +31,7 @@ def align_images(input, reference):
     # matches = matches[:good_matches]
     matches = matches[:int(len(matches)* GOOD_MATCH_PERCENT)]
 
-    img3 = cv.drawMatches(inputgray, keypoints1, referencegray, keypoints2, matches, None, flags = 2)
+    img3 = cv.drawMatches(input, keypoints1, reference, keypoints2, matches, None, flags = 2)
 
     #homography matrix
     pointsA = np.zeros((len(matches), 2), dtype=np.float32)
